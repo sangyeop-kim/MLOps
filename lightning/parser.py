@@ -141,7 +141,6 @@ def find_scheduler(self, optimizer, hparams):
     
     
 def find_loss(loss_name):
-    loss_name = loss_name.lower().replace(' ', '')
     
     if loss_name == 'L1':
         loss = torch.nn.L1Loss()
@@ -189,22 +188,22 @@ def find_loss(loss_name):
         loss = torch.nn.MultiLabelSoftMarginLoss()
         
     elif loss_name == 'CosineEmbedding':
-        loss = torch.nn.CosineEmbeddingLoss()'
+        loss = torch.nn.CosineEmbeddingLoss()
         
     elif loss_name == 'MultiMargin':
-        loss = torch.nn.MultiMarginLoss()'
+        loss = torch.nn.MultiMarginLoss()
         
     elif loss_name == 'TripletMargin':
-        loss = torch.nn.TripletMarginLoss()'
+        loss = torch.nn.TripletMarginLoss()
         
     elif loss_name == 'TripletMarginWithDistance':
-        loss = torch.nn.TripletMarginWithDistanceLoss()'
+        loss = torch.nn.TripletMarginWithDistanceLoss()
         
     else:
-        loss_list = "'L1', 'MSE', 'CrossEntropy', 'ce', 'CTC', 'NLL', \
-            'PoissonNLL', 'KLDiv', 'BCE', 'BCEWithLogits', 'MarginRanking', \    'HingeEmbedding', 'MultiLabelMargin', 'SmoothL1', 'SoftMargin', \
-            'MultiLabelSoftMargin', 'CosineEmbedding', 'MultiMargin', 'TripletMargin', \
-            'TripletMarginWithDistance'"
+        loss_list = """'L1', 'MSE', 'CrossEntropy', 'ce', 'CTC', 'NLL', 'PoissonNLL', 'KLDiv', 
+        'BCE', 'BCEWithLogits', 'MarginRanking', 'HingeEmbedding', 'MultiLabelMargin', 'SmoothL1', 
+        'SoftMargin', 'MultiLabelSoftMargin', 'CosineEmbedding', 'MultiMargin', 'TripletMargin', 
+        'TripletMarginWithDistance'"""
         raise Exception('loss should be in [%s]' % loss_list)
     
     return loss

@@ -49,7 +49,10 @@ class Template(LightningModule):
     
     def __connect_trainer_model(self):
         self.configure_optimizers = types.MethodType(configure_optimizers, self)
-    
+        self.loss = find_loss(self.hparams['loss'])
+        if self.loss is None:
+            raise Exception('loss is not defined')
+        
     def __update_hparams(self, hparams):
         for key, value in hparams.items():
             self.hparams[key] = value

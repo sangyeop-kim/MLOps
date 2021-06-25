@@ -169,11 +169,17 @@ dataloader_hparams_default = {
     'validation_persistent_workers': False,
 }
 
+model_hparams_default = {
+    'loss' : None
+}
+
 hparams_default = {}
 hparams_default.update(trainer_hparams_default)
 hparams_default.update(optimizer_hparams_default)
 hparams_default.update(scheduler_hparams_default)
 hparams_default.update(dataloader_hparams_default)
+hparams_default.update(model_hparams_default)
+
 
 if __name__ == '__main__':
     print(hparams_default)
