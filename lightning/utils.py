@@ -1,6 +1,4 @@
-
-
-trainer_hparams = {
+trainer_hparams_default = {
         'logger': True,
         'checkpoint_callback': True,
         'callbacks': None,
@@ -13,7 +11,7 @@ trainer_hparams = {
         'gpus': None,
         'auto_select_gpus': False,
         'tpu_cores': None,
-        'ipus': None,
+        # 'ipus': None,
         'log_gpu_memory': None,
         'progress_bar_refresh_rate': None,
         'overfit_batches': 0.0,
@@ -60,35 +58,122 @@ trainer_hparams = {
 }
 
 # warning
-optimizer_hparams = {
+optimizer_hparams_default = {
+    'optimizer': 'Adam',
     
+    'Adadelta' : {
+        'lr': 1.0, 'rho': 0.9, 'eps': 1e-06, 'weight_decay': 0
+    }, 
+    
+    'Adagrad' : {
+        'lr': 0.01, 'lr_decay': 0, 'weight_decay': 0, 'initial_accumulator_value': 0, 'eps': 1e-10
+    },
+     
+    'Adam' : {
+        'lr': 0.001, 'betas': (0.9, 0.999), 'eps': 1e-08, 'weight_decay': 0, 'amsgrad': False
+    },
+     
+    'AdamW' : {
+        'lr': 0.001, 'betas': (0.9, 0.999), 'eps': 1e-08, 'weight_decay': 0.01, 'amsgrad': False
+    }, 
+    
+    'SparseAdam' : {
+        'lr': 0.001, 'betas': (0.9, 0.999), 'eps': 1e-08
+    }, 
+    
+    'Adamax' : {
+        'lr': 0.002, 'betas': (0.9, 0.999), 'eps': 1e-08, 'weight_decay': 0
+    }, 
+    
+    'ASGD' : {
+        'lr': 0.01, 'lambd': 0.0001, 'alpha': 0.75, 't0': 1000000.0, 'weight_decay': 0
+    }, 
+    
+    'LBFGS' : {
+        'lr': 1, 'max_iter': 20, 'max_eval': None, 'tolerance_grad': 1e-07, 'tolerance_change': 1e-09, 
+        'history_size': 100, 'line_search_fn': None
+    }, 
+    
+    'RMSprop' : {
+        'lr': 0.01, 'alpha': 0.99, 'eps': 1e-08, 'weight_decay': 0, 'momentum': 0, 'centered': False
+    },
+    
+    'Rprop' : {
+        'lr': 0.01, 'etas': (0.5, 1.2), 'step_sizes': (1e-06, 50)
+    }, 
+    
+    'SGD' : {
+        'lr': 0.01, 'momentum': 0, 'dampening': 0, 'weight_decay': 0, 'nesterov': False
+    }
 }
 
 # warning
-scheduler_hparams = {
+scheduler_hparams_default = {
+    'scheduler': None,
+    'last_epoch': -1,
+    'verbose': False,
     
+    'LambdaLR': {
+        'lr_lambda': None 
+    },
+    
+    'MultiplicativeLR': {
+        'lr_lambda': None 
+    },
+    
+    'StepLR': {
+        'step_size': None, 'gamma':0.1
+    },
+    
+    'MultiStepLR': {
+        'milestones': None, 'gamma': 0.1, 
+    },
+    
+    'ExponentialLR': {
+        'gamma': None
+    },
+    
+    'CosineAnnealingLR': {
+        'T_max': None, 'eta_min': 0, 
+    },
+    
+    'CosineAnnealingWarmRestarts': {
+        'T_0': None, 'T_mult': 1, 'eta_min': 0, 
+    }
 }
 
-dataloader_hparams = {
-    'batch_size': 1, 
-    'shuffle': False, 
-    'sampler': None,
-    'batch_sampler': None, 
-    'num_workers': 0, 
-    'collate_fn': None,
-    'pin_memory': False, 
-    'drop_last': False, 
-    'timeout': 0,
-    'worker_init_fn': None, 
-    'prefetch_factor': 2,
-    'persistent_workers': False
+dataloader_hparams_default = {
+    'train_batch_size': 1, 
+    'train_shuffle': False, 
+    'train_sampler': None,
+    'train_batch_sampler': None, 
+    'train_num_workers': 0, 
+    'train_collate_fn': None,
+    'train_pin_memory': False, 
+    'train_drop_last': False, 
+    'train_timeout': 0,
+    'train_worker_init_fn': None, 
+    'train_prefetch_factor': 2,
+    'train_persistent_workers': False,
+    'validation_batch_size': -1, 
+    'validation_shuffle': False, 
+    'validation_sampler': None,
+    'validation_batch_sampler': None, 
+    'validation_num_workers': 0, 
+    'validation_collate_fn': None,
+    'validation_pin_memory': False, 
+    'validation_drop_last': False, 
+    'validation_timeout': 0,
+    'validation_worker_init_fn': None, 
+    'validation_prefetch_factor': 2,
+    'validation_persistent_workers': False,
 }
 
-hparams = {}
-hparams.update(trainer_hparams)
-hparams.update(optimizer_hparams)
-hparams.update(scheduler_hparams)
-hparams.update(dataloader_hparams)
+hparams_default = {}
+hparams_default.update(trainer_hparams_default)
+hparams_default.update(optimizer_hparams_default)
+hparams_default.update(scheduler_hparams_default)
+hparams_default.update(dataloader_hparams_default)
 
 if __name__ == '__main__':
-    print(hparams)
+    print(hparams_default)
