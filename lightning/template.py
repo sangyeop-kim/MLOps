@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 
 def configure_optimizers(self):
     self.optimizer = find_optimizer(self, self.hparams)
-    self.scheduler = find_scheduler(self, self.hparams)
+    self.scheduler = find_scheduler(self, self.optimizer, self.hparams)
     
     if self.scheduler is not None:
         return [self.optimizer], [self.scheduler]
@@ -35,6 +35,17 @@ class Template(LightningModule):
     
     def test(self, ):
         pass
+    
+    def fit_crossvalidation(self, ):
+        pass
+    
+    def test_crossvalidation(self, ):
+        pass
+    
+    
+    '''
+    complete
+    '''
     
     def __connect_trainer_model(self):
         self.configure_optimizers = types.MethodType(configure_optimizers, self)
