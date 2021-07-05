@@ -169,8 +169,13 @@ dataloader_hparams_default = {
     'validation_persistent_workers': False,
 }
 
-model_hparams_default = {
-    'loss' : None
+
+custom_hparams_default = {
+    'loss': None,
+    'kfold': 3,
+    'random_seed': 0,
+    'validation_ratio': None, # train_dataset만 사용할 경우, kfold에서 test셋이 따로 없을 경우
+    'save_path': 'logs',
 }
 
 hparams_default = {}
@@ -178,7 +183,7 @@ hparams_default.update(trainer_hparams_default)
 hparams_default.update(optimizer_hparams_default)
 hparams_default.update(scheduler_hparams_default)
 hparams_default.update(dataloader_hparams_default)
-hparams_default.update(model_hparams_default)
+hparams_default.update(custom_hparams_default)
 
 
 if __name__ == '__main__':
