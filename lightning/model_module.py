@@ -1,10 +1,11 @@
 import pytorch_lightning as pl
+import numpy as np
 
 class LightningModule(pl.LightningModule):
     def __init__(self, ):
         super().__init__()
-        self.train_loss = []
-        self.val_loss = []
+        self.train_loss = {}
+        self.val_loss = {}
         
     def load_model(self, path):
         '''

@@ -183,3 +183,4 @@ hparams_default.update(model_hparams_default)
 
 if __name__ == '__main__':
     print(hparams_default)
+    
