@@ -176,6 +176,9 @@ custom_hparams_default = {
     'random_seed': 0,
     'validation_ratio': None, # train_dataset만 사용할 경우, kfold에서 test셋이 따로 없을 경우
     'save_path': 'logs',
+    'neptune_workspace': None, # 'sangyeop-kim'
+    'neptune_project': None, # 'sample'
+    'name': None,
 }
 
 hparams_default = {}
