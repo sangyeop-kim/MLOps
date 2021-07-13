@@ -1,6 +1,7 @@
 import pytorch_lightning as pl
 import numpy as np
 import os
+import neptune.new as neptune
 
 class LightningModule(pl.LightningModule):
     def __init__(self, ):
@@ -9,12 +10,7 @@ class LightningModule(pl.LightningModule):
         self.val_loss = {}
         self.current_fold = None
         self.id_ = None
-        
-    def load_model(self, path):
-        '''
-        To do
-        '''
-        pass
+        self.run = None
     
     def training_step(self, batch, batch_idx):
         x, y = batch
@@ -72,17 +68,47 @@ class LightningModule(pl.LightningModule):
                 print()
         self.validation_epoch_end_adding(validation_step_outputs)
     
-    def save_neptune(self, neptune_folder, values):
+
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+        pred = self(x)
+        try:
+            loss = self.loss(pred, y)
+        except:
+            raise Exception("Set the object\'s loss in the following way.\n"+\
+                            "\t   'object_name'.loss = torch.nn.MSELoss()")
+
+        return {'loss': loss, 'pred': pred, 'label': y}
+        
+    def test_epoch_end(self, test_step_outputs):
+        total_loss = np.mean(list(map(lambda x: x['loss'].item(), test_step_outputs)))
+        if self.id_ is not None:
+            self.run = neptune.init('%s/%s' % (self.hparams['neptune_workspace'], 
+                                               self.hparams['neptune_project']), run=self.id_)
+        self.save_neptune('loss/test_loss', total_loss.item(), False)
+        self.log('final_loss', total_loss.item())
+
+        if self.run is not None:
+            self.run.stop()
+
+    def save_neptune(self, neptune_folder, values, log=True):
         if self.run is not None:
             if self.current_fold is None:
-                self.run[neptune_folder].log(values)
+                if log:
+                    self.run[neptune_folder].log(values)
+                else: 
+                    self.run[neptune_folder] = values
             else:
+                
                 folder_split = neptune_folder.split('/')
                 final_folder = folder_split[-1]
                 new_neptune_folder = os.path.join(('/').join(folder_split[:-1]), 
                                                   '%s_fold'%self.current_fold, final_folder)
-                self.run[new_neptune_folder].log(values)
-        
+                if log:
+                    self.run[new_neptune_folder].log(values)
+                else:
+                    self.run[new_neptune_folder] = values
+
     def training_epoch_end_adding(self, training_step_outputs):
         '''
         example:
@@ -95,6 +121,17 @@ class LightningModule(pl.LightningModule):
         pass
     
     def validation_epoch_end_adding(self, validation_step_outputs):
+        '''
+        example:
+        from neptune.new.types import File
+
+        if self.current_epoch % 10 ==0:
+            print('print message per 10 epochs')
+            self.run["train/image"].log(File('outputs/image.png'))
+        '''
+        pass
+
+    def test_epoch_end_adding(self, test_step_outputs):
         '''
         example:
         from neptune.new.types import File

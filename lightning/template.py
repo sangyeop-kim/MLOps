@@ -36,10 +36,7 @@ class Template(LightningModule):
     def forward(self, x):
         raise NotImplementedError()
     
-    def fit(self, hparams, train_dataset, validation_dataset=None, test_dataset=None):
-        '''
-        test_dataset은 아직 반영 안함.
-        '''
+    def fit(self, hparams, train_dataset, validation_dataset=None):
         
         self.__update_hparams(hparams)
         self.__connect_trainer_model()
@@ -86,7 +83,14 @@ class Template(LightningModule):
         self.run.stop()
         print(self.id_)
         
-    def test(self, ):
+    def test(self, test_dataset, gpus=None, batch_size=-1):
+        temp = self.hparams['validation_batch_size']
+        self.hparams['validation_batch_size'] = batch_size
+        test_dataloader = self.__make_dataloader(test_dataset, False)
+        self.hparams['validation_batch_size'] = temp
+        
+        self.trainer = Trainer({'gpus': gpus})
+        self.trainer.test(self, test_dataloader)
         pass
     
     
@@ -305,7 +309,7 @@ class Template(LightningModule):
         return train_loader_list, validation_loader_list, test_loader_list
     
 class Trainer(Trainer):
-    def __init__(self, hparams, callbacks, logger):
+    def __init__(self, hparams, callbacks=None, logger=True):
         self.hparams = {k: v for k, v in hparams.items() if k in trainer_hparams_default.keys()}
         self.hparams['callbacks'] = callbacks
         self.hparams['logger'] = logger
