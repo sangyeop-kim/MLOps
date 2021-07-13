@@ -7,3 +7,5 @@ MNIST/
 lightning_logs/
 Untitled*
 logs/
+test_page.ipynb
+.neptune/
