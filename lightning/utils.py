@@ -179,6 +179,7 @@ custom_hparams_default = {
     'neptune_workspace': None, # 'sangyeop-kim'
     'neptune_project': None, # 'sample'
     'name': None,
+    'saved_top_k': 3,
 }
 
 hparams_default = {}
