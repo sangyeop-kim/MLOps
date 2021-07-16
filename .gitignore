@@ -9,3 +9,4 @@ Untitled*
 logs/
 test_page.ipynb
 .neptune/
+.DS_Store
