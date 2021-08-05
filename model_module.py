@@ -15,7 +15,11 @@ class LightningModule(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         x, y = batch
         pred = self(x)
-        loss = self.loss(pred, y)
+        if type(pred) == tuple:
+            pred_ = pred[0]
+        else: 
+            pred_ = pred
+        loss = self.loss(pred_, y)
         
         # log hparams도 알아보기
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
@@ -33,7 +37,11 @@ class LightningModule(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         x, y = batch
         pred = self(x)
-        loss = self.loss(pred, y)
+        if type(pred) == tuple:
+            pred_ = pred[0]
+        else: 
+            pred_ = pred
+        loss = self.loss(pred_, y)
         
         if len(self.train_loss) != 0:
             self.log('val_loss', loss, on_step=True, on_epoch=True, sync_dist=True)
@@ -72,8 +80,13 @@ class LightningModule(pl.LightningModule):
     def test_step(self, batch, batch_idx):
         x, y = batch
         pred = self(x)
+        if type(pred) == tuple:
+            pred_ = pred[0]
+        else: 
+            pred_ = pred
+            
         try:
-            loss = self.loss(pred, y)
+            loss = self.loss(pred_, y)
         except:
             raise Exception("Set the object\'s loss in the following way.\n"+\
                             "\t   'object_name'.loss = torch.nn.MSELoss()")
