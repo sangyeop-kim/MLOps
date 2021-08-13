@@ -180,7 +180,8 @@ custom_hparams_default = {
     'neptune_project': None, # 'sample'
     'name': None,
     'saved_top_k': 3,
-    'validation_index': None
+    'validation_index': None,
+    'save_X': True
 }
 
 hparams_default = {}

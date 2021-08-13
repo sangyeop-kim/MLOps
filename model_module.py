@@ -4,7 +4,7 @@ import os
 import neptune.new as neptune
 
 class LightningModule(pl.LightningModule):
-    def __init__(self, ):
+    def __init__(self):
         super().__init__()
         self.train_loss = {}
         self.val_loss = {}
@@ -24,8 +24,12 @@ class LightningModule(pl.LightningModule):
         # log hparams도 알아보기
         self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
         self.save_neptune('loss/train_step', loss)
-
-        return {'loss': loss, 'pred': pred, 'label': y}
+        
+        if self.hparams['save_X']:
+            return {'loss': loss, 'pred': pred, 'label': y, 'X': x}
+        else:
+            return {'loss': loss, 'pred': pred, 'label': y}
+        
         
     def training_epoch_end(self, training_step_outputs):
         total_loss = np.mean(list(map(lambda x: x['loss'].item(), training_step_outputs)))
@@ -47,7 +51,10 @@ class LightningModule(pl.LightningModule):
             self.log('val_loss', loss, on_step=True, on_epoch=True, sync_dist=True)
             self.save_neptune('loss/valid_step', loss)
 
-        return {'loss': loss, 'pred': pred, 'y': y}
+        if self.hparams['save_X']:
+            return {'loss': loss, 'pred': pred, 'label': y, 'X': x}
+        else:
+            return {'loss': loss, 'pred': pred, 'label': y}
 
 
     def validation_epoch_end(self, validation_step_outputs):
@@ -92,6 +99,7 @@ class LightningModule(pl.LightningModule):
                             "\t   'object_name'.loss = torch.nn.MSELoss()")
 
         return {'loss': loss, 'pred': pred, 'label': y}
+        return {'loss': loss, 'pred': pred, 'label': y, 'X': x}
         
     def test_epoch_end(self, test_step_outputs):
         total_loss = np.mean(list(map(lambda x: x['loss'].item(), test_step_outputs)))
