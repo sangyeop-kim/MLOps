@@ -192,7 +192,9 @@ class Template(LightningModule):
                                                     self.hparams['neptune_project']),
                                     name=self.hparams['name'], source_files=['**/*.py', '*.ipynb'])
             self.id_ = run.fetch()['sys']['id']
-            changed = {key: values for key, values in self.hparams.items() if values != hparams_default[key]}
+            changed = {key: values for key, values in self.hparams.items() if key \
+                                                                    not in hparams_default.keys() \
+                                                                        or values != hparams_default[key]}
             run['changed_hyperparameter'] = changed
             run['default_hyperparameter'] = {key: values for key, values in hparams_default.items() \
                                                 if key not in changed.keys()}
