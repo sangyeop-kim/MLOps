@@ -95,47 +95,50 @@ def find_scheduler(self, optimizer, hparams):
         return None
     
     if scheduler_name == 'LambdaLR':
-        lr_scheduler.LambdaLR(optimizer, last_epoch=self.hparams['last_epoch'], 
-                              verbose=self.hparams['verbose'], 
-                              lr_lambda=self.hparams[scheduler_name]['lr_lambda'])
+        scheduler = lr_scheduler.LambdaLR(optimizer, last_epoch=self.hparams['last_epoch'], 
+                                          verbose=self.hparams['verbose'], 
+                                        lr_lambda=self.hparams[scheduler_name]['lr_lambda'])
         
     elif scheduler_name == 'MultiplicativeLR':
-        lr_scheduler.MultiplicativeLR(optimizer, last_epoch=self.hparams['last_epoch'], 
-                              verbose=self.hparams['verbose'], 
-                              lr_lambda=self.hparams[scheduler_name]['lr_lambda'])
+        scheduler = lr_scheduler.MultiplicativeLR(optimizer, last_epoch=self.hparams['last_epoch'], 
+                                          verbose=self.hparams['verbose'], 
+                                        lr_lambda=self.hparams[scheduler_name]['lr_lambda'])
 
     elif scheduler_name == 'StepLR':
-        lr_scheduler.StepLR(optimizer, last_epoch=self.hparams['last_epoch'], 
-                              verbose=self.hparams['verbose'], 
-                              step_size=self.hparams[scheduler_name]['step_size'], 
-                              gamma=self.hparams[scheduler_name]['gamma'])
+        scheduler = lr_scheduler.StepLR(optimizer, last_epoch=self.hparams['last_epoch'], 
+                                        verbose=self.hparams['verbose'], 
+                                        step_size=self.hparams[scheduler_name]['step_size'], 
+                                        gamma=self.hparams[scheduler_name]['gamma'])
 
     elif scheduler_name == 'MultiStepLR':
-        lr_scheduler.MultiStepLR(optimizer, last_epoch=self.hparams['last_epoch'], 
-                              verbose=self.hparams['verbose'], 
-                              milestones=self.hparams[scheduler_name]['milestones'], 
-                              gamma=self.hparams[scheduler_name]['gamma'])
+        scheduler = lr_scheduler.MultiStepLR(optimizer, last_epoch=self.hparams['last_epoch'], 
+                                            verbose=self.hparams['verbose'], 
+                                            milestones=self.hparams[scheduler_name]['milestones'], 
+                                            gamma=self.hparams[scheduler_name]['gamma'])
 
     elif scheduler_name == 'ExponentialLR':
-        lr_scheduler.ExponentialLR(optimizer, last_epoch=self.hparams['last_epoch'], 
-                              verbose=self.hparams['verbose'], 
-                              gamma=self.hparams[scheduler_name]['gamma'])
+        scheduler = lr_scheduler.ExponentialLR(optimizer, last_epoch=self.hparams['last_epoch'], 
+                                              verbose=self.hparams['verbose'], 
+                                              gamma=self.hparams[scheduler_name]['gamma'])
         
     elif scheduler_name == 'CosineAnnealingLR':
-        lr_scheduler.CosineAnnealingLR(optimizer, last_epoch=self.hparams['last_epoch'], 
-                              verbose=self.hparams['verbose'], 
-                              T_max=self.hparams[scheduler_name]['T_max'], 
-                              eta_min=self.hparams[scheduler_name]['eta_min'])
-    
+        scheduler = lr_scheduler.CosineAnnealingLR(optimizer, last_epoch=self.hparams['last_epoch'], 
+                                                    verbose=self.hparams['verbose'], 
+                                                    T_max=self.hparams[scheduler_name]['T_max'], 
+                                                    eta_min=self.hparams[scheduler_name]['eta_min'])
+                            
     elif scheduler_name == 'CosineAnnealingWarmRestarts':
-        lr_scheduler.CosineAnnealingWarmRestarts(optimizer, last_epoch=self.hparams['last_epoch'], 
-                              verbose=self.hparams['verbose'], 
-                              T_0=self.hparams[scheduler_name]['T_0'], 
-                              T_mult=self.hparams[scheduler_name]['T_mult'], 
-                              eta_min=self.hparams[scheduler_name]['eta_min'])
+        scheduler = lr_scheduler.CosineAnnealingWarmRestarts(optimizer, 
+                                                            last_epoch=self.hparams['last_epoch'], 
+                                                            verbose=self.hparams['verbose'], 
+                                                            T_0=self.hparams[scheduler_name]['T_0'], 
+                                                            T_mult=self.hparams[scheduler_name]['T_mult'], 
+                                                            eta_min=self.hparams[scheduler_name]['eta_min'])
     
     else:
-        scheduler_list = ""
+        scheduler = None
+        
+    return scheduler
         
     
     
